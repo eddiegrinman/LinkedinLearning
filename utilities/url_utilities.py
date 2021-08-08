@@ -9,7 +9,7 @@ def load_urls_from_file(file_path: str):
     # add the code needed to read the text file with urls in it
     try:
         with open(file_path) as f:
-            content = f.readline()
+            content = f.readlines()
             return content
 
     except FileNotFoundError:
@@ -44,26 +44,29 @@ def scrape_page(page_contents: str):
     for word in words:
         clean = True
 
-        # no punctuation
-         for punctuation_marks in string.punctuation:
-           if punctuation_marks in word:
-                    clean = False
+    # no punctuation
 
-        # no numbers
-            if any(char.isdigit() for char in word):
-                clean = False
+    punctuation_marks: str
+    for punctuation_marks in string.punctuation:
+       if punctuation_marks in word:
+           clean = False
 
-            #at least two characters but no more than 10
-            if len(word) < 2 or len(word) > 10:
-                clean = False
+    # no numbers
 
-            if not re.match(r'^\w+$', word):
-                clean = False
+       if any(char.isdigit() for char in word):
+           clean = False
 
-            if clean:
-                try:
-                    clean_words.append(word.lower())
-                except UnicodeEncodeError:
-                    print(".")
+        #at least two characters but no more than 10
+       if len(word) < 2 or len(word) > 10:
+            clean = False
+
+       if not re.match(r'^\w+$', word):
+            clean = False
+
+       if clean:
+            try:
+                clean_words.append(word.lower())
+            except UnicodeEncodeError:
+                print(".")
 
     return clean_words
